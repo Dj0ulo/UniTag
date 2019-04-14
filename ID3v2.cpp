@@ -78,7 +78,10 @@ std::string ID3v2::parseFrameWidthIndex(const unsigned int index) const
     else
         result = std::string(f.data.begin() + i, f.data.end() );
 
-    if(result[result.size()-1] == 0x00)
+    int null = (int)result.find('\0');
+    if(f.flag.substr(0,3)!="TXX" && null!=-1)
+        result.erase(result.begin()+null,result.end());
+    else if(result[result.size()-1] == 0x00)
         result.erase(result.end()-1);
 
     if(f.flag == getFrameFlag(GENRE) && result[0]=='(' && result[result.size()-1]==')')
