@@ -30,6 +30,8 @@ std::string ID3v2::parseFrameWidthIndex(const unsigned int index) const
     auto f = _frames[index];
 
     const unsigned int dataSize = f.data.size();
+    if(dataSize==0)
+        return result;
 
     unsigned int i = 1;
 

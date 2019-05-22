@@ -103,34 +103,36 @@ std::vector <char> M4::getCoverArt() const
 }
 std::string M4::getFrameFlag(const unsigned int flag) const
 {
+    std::string cr;
+    cr.push_back(0xc2a9);
     if(flag == TITLE)
-        return "�nam";
+        return cr+"nam";
     else if(flag == ARTIST)
-        return "�ART";
+        return cr+"ART";
     else if(flag == ALBUM)
-        return "�alb";
+        return cr+"alb";
     else if(flag == ALBUM_ARTIST)
         return "aART";
     else if(flag == DATE)
-        return "�day";
+        return cr+"day";
     else if(flag == GENRE)
-        return "�gen";
+        return cr+"gen";
     else if(flag == LABEL)
         return "----:com.apple.iTunes:LABEL";
     else if(flag == DESCRIPTION)
         return "desc";
     else if(flag == ENCODED_BY)
-        return "�too";
+        return cr+"too";
     else if(flag == ENCODER)
-        return "�too";
+        return cr+"too";
     else if(flag == TRACK_NUM)
         return "trkn";
     else if(flag == DISC)
         return "disk";
     else if(flag == COMMENT)
-        return "�cmt";
+        return cr+"cmt";
     else if(flag == LYRICS)
-        return "�lyr";
+        return cr+"lyr";
     else if(flag == COVER_ART)
         return "covr";
     return "";
