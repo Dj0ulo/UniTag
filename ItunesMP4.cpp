@@ -104,33 +104,33 @@ std::vector <char> M4::getCoverArt() const
 std::string M4::getFrameFlag(const unsigned int flag) const
 {
     if(flag == TITLE)
-        return "©nam";
+        return "ï¿½nam";
     else if(flag == ARTIST)
-        return "©ART";
+        return "ï¿½ART";
     else if(flag == ALBUM)
-        return "©alb";
+        return "ï¿½alb";
     else if(flag == ALBUM_ARTIST)
         return "aART";
     else if(flag == DATE)
-        return "©day";
+        return "ï¿½day";
     else if(flag == GENRE)
-        return "©gen";
+        return "ï¿½gen";
     else if(flag == LABEL)
         return "----:com.apple.iTunes:LABEL";
     else if(flag == DESCRIPTION)
         return "desc";
     else if(flag == ENCODED_BY)
-        return "©too";
+        return "ï¿½too";
     else if(flag == ENCODER)
-        return "©too";
+        return "ï¿½too";
     else if(flag == TRACK_NUM)
         return "trkn";
     else if(flag == DISC)
         return "disk";
     else if(flag == COMMENT)
-        return "©cmt";
+        return "ï¿½cmt";
     else if(flag == LYRICS)
-        return "©lyr";
+        return "ï¿½lyr";
     else if(flag == COVER_ART)
         return "covr";
     return "";
@@ -307,7 +307,7 @@ void M4::parse()
 
         f.read(&bytes[0],bytes.size());
 
-        unsigned int endHeader = f.tellg() + (size_t)bytesToInt(bytes, false) - 4;
+        unsigned int endHeader = (unsigned int)f.tellg() + (size_t)bytesToInt(bytes, false) - 4;
 
         f.read(&bytes[0],bytes.size());
         if(toStr(bytes) == "ftyp")
@@ -328,27 +328,27 @@ void M4::parse()
         {
             f.read(&bytes[0],bytes.size());
             const size_t sizeBlock = (size_t)bytesToInt(bytes,false);
-            const size_t endBlock = f.tellg() + sizeBlock - 4;
+            const size_t endBlock = (unsigned int)f.tellg() + sizeBlock - 4;
 
             if(sizeBlock != 0)
             {
                 f.read(&bytes[0],bytes.size());
                 const std::string atomName = toStr(bytes);
                 if(atomName == "moov")
-                    _chunks[CHUNK_MOOV] = Chunk(f.tellg() - 8, sizeBlock);
+                    _chunks[CHUNK_MOOV] = Chunk((unsigned int)f.tellg() - 8, sizeBlock);
                 else if(atomName == "trak" || atomName == "mdia" || atomName == "minf" || atomName == "stbl");//get into these atoms
                 else if(atomName == "stco")
                 {
-                    _chunks[CHUNK_STCO] = Chunk(f.tellg() - 8, sizeBlock);
+                    _chunks[CHUNK_STCO] = Chunk((unsigned int)f.tellg() - 8, sizeBlock);
                     f.seekg(endBlock);
                 }
                 else if(atomName == "udta")
-                    _chunks[CHUNK_UDTA] = Chunk(f.tellg() - 8, sizeBlock);
+                    _chunks[CHUNK_UDTA] = Chunk((unsigned int)f.tellg() - 8, sizeBlock);
                 else if(atomName == "meta")
-                    _chunks[CHUNK_META] = Chunk(f.tellg() - 8, sizeBlock);
+                    _chunks[CHUNK_META] = Chunk((unsigned int)f.tellg() - 8, sizeBlock);
                 else if(atomName == "ilst")
                 {
-                    _chunks[CHUNK_ILST] = Chunk(f.tellg() - 8, sizeBlock);
+                    _chunks[CHUNK_ILST] = Chunk((unsigned int)f.tellg() - 8, sizeBlock);
                     break;
                 }
                 else
@@ -366,7 +366,7 @@ void M4::parse()
 
             f.read(&bytes[0],bytes.size());//size of the current frame
             const size_t sizeFrame = bytesToInt(bytes,false);
-            const size_t endFrame = f.tellg() - 4 + sizeFrame;
+            const size_t endFrame = (unsigned int)f.tellg() - 4 + sizeFrame;
 
             if(endFrame >= _fileSize)
                 break;
@@ -379,7 +379,7 @@ void M4::parse()
                 bytes.resize(4);
                 f.read(&bytes[0],bytes.size());
                 const size_t chunkSize = bytesToInt(bytes,false);//size of the chunk
-                const size_t chunkEnd = f.tellg() + chunkSize - 4;//end of the chunk
+                const size_t chunkEnd = (unsigned int)f.tellg() + chunkSize - 4;//end of the chunk
 
                 f.read(&bytes[0],bytes.size());
                 const std::string chunkType = toStr(bytes);

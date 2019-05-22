@@ -4,6 +4,7 @@
 #include <sstream>
 #include <cstdlib>
 #include <algorithm>
+#include <cmath>
 
 #include "Utils.h"
 #include "UniTag.h"
@@ -75,8 +76,11 @@ std::string ID3v2::parseFrameWidthIndex(const unsigned int index) const
             }
         }
     }
-    else
+    else if(i<dataSize)
         result = std::string(f.data.begin() + i, f.data.end() );
+
+    if(result.size()==0)
+        return result;
 
     int null = (int)result.find('\0');
     if(f.flag.substr(0,3)!="TXX" && null!=-1)
@@ -399,7 +403,7 @@ unsigned int ID3v2::getDuration()
                 }while(!condition);// || vbr == Vbr::FALSE_FIRST);
             }///check where the first frame header is
 
-            posFrame = ( f.tellg() - buffer.size() ) + found;
+            posFrame = ( (unsigned int)f.tellg() - buffer.size() ) + found;
 
             ///---------------------------------------------BITRATE
             string strBitRate = b1.to_string().substr(0,4);

@@ -300,7 +300,7 @@ void VorbisComment::parse()
                 f.read(&bytes[0],bytes.size());
 
                 unsigned int sizeBlock = bytesToInt(bytes,false);
-                unsigned int endBlock = f.tellg() + sizeBlock;
+                unsigned int endBlock = (unsigned int)f.tellg() + sizeBlock;
                 //cout<<"Pos : "<<f.tellg()<<", size : "<<sizeBlock<<", type : "<<blockType<<endl;
                 if(blockType == 127)
                     break;
